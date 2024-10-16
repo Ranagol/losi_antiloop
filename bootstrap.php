@@ -1,6 +1,6 @@
 <?php
 
-use App\TimeTableCommand;
+use App\Commands\TimeTableCommand;
 use Symfony\Component\Console\Application;
 
 define(
