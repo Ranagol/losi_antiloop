@@ -1,0 +1,11 @@
+services:
+  antiloop-test-app:
+    build: .
+    environment:
+      SITE_URL: https://localhost
+    networks:
+      - test
+
+networks:
+  test:
+    driver: bridge
