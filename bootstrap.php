@@ -1,6 +1,5 @@
 <?php
 
-use App\Commands\TimeTableCommand;
 use Symfony\Component\Console\Application;
 
 define(
@@ -13,6 +12,25 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $consoleApp = new Application();
 
-$consoleApp->add(new TimeTableCommand());
+// Auto add all the commands
+$directoryOfCommands = __DIR__ . '/app/Commands';
+$commandFiles = array_diff(
+    scandir($directoryOfCommands),
+    [
+        '.',
+        '..',
+    ]
+);
+
+foreach ($commandFiles as $commandFile) {
+    if (is_file($directoryOfCommands . '/' . $commandFile) === true) {
+        $class = '\App\Commands\\' . basename(
+            $commandFile,
+            '.php'
+        );
+
+        $consoleApp->add(new $class());
+    }
+}
 
 $consoleApp->run();

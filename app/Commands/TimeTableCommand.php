@@ -4,15 +4,11 @@ namespace App\Commands;
 
 use App\Console\UserInput;
 use App\Enums\StationEnum;
-use DateMalformedStringException;
 use DateTimeImmutable;
-use InvalidArgumentException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 
 #[
     AsCommand(
@@ -23,10 +19,7 @@ use Symfony\Component\Console\Question\Question;
 ]
 class TimeTableCommand extends Command
 {
-    const array STATION_NAMES = [
-        'A',
-        'B',
-    ];
+    public const string NAME = 'app:timetable';
 
     protected function execute(
         InputInterface  $input,
@@ -39,22 +32,6 @@ class TimeTableCommand extends Command
             $this
         );
 
-        $numberOfCases = $userInput->ask('Please enter the number of cases: ');
-
-        for ($i = 0; $i < $numberOfCases; $i++) {
-            $this->generateCase(
-                $userInput,
-                $output
-            );
-        }
-
-        return Command::SUCCESS;
-    }
-
-    private function generateCase(
-        UserInput $userInput,
-        OutputInterface $output
-    ): void {
         $turnAroundTime = $userInput->ask('Please enter the turnaround time in minutes: ');
 
         $numberOfTrips = $userInput->ask('Please enter the number of trips for stations separated by space: ');
@@ -131,28 +108,7 @@ class TimeTableCommand extends Command
                 $result
             )
         );
-    }
 
-    private function getOppositeStationName(string $stationName): string
-    {
-        if (empty($stationName) === true) {
-            throw new InvalidArgumentException('Station name cannot be empty.');
-        }
-
-        if ($stationName === self::STATION_NAMES[0]) {
-            return self::STATION_NAMES[1];
-        }
-
-        return self::STATION_NAMES[0];
-    }
-
-    private function getTurnaroundTime(): int
-    {
-
-    }
-
-    private function askQuestion(string $question)
-    {
-
+        return Command::SUCCESS;
     }
 }
